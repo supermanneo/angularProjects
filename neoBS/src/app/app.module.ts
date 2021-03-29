@@ -23,12 +23,15 @@ import { BsPageComponent } from "./bs-page/bs-page.component";
 import { LocalStorageService } from './local-storage.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { MatTabsModule } from '@angular/material/tabs';
+
 @NgModule({
   imports: [
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    MatTabsModule,
     RouterModule.forRoot([
       { path: "", component: ProductListComponent },
       { path: "products/:productId", component: ProductDetailsComponent },
