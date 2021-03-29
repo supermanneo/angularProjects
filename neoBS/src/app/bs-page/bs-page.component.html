@@ -1,0 +1,11 @@
+<p>
+  Bs Page
+</p>
+
+<div *ngFor="let bs of bsList | async">
+  <label>{{ bs.bsCode }}</label>
+  <label>{{bs.bsRegion}}</label>
+
+</div>
+
+<button (click)="getPrice()">GetPrice</button>
