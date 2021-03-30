@@ -115,7 +115,7 @@ export class SettingsComponent implements OnInit {
       rowItem: rowItem,
       checked: checked
     });
-    console.log(rowIndex)
+    console.log(rowIndex);
   }
 
   onPageIndexChange(pageIndex): void {
@@ -164,6 +164,11 @@ export class SettingsComponent implements OnInit {
     bsJsonInitData = JSON.parse(JSON.stringify(neoOriginSource));
     this.basicDataSource = bsJsonInitData;
     console.log(bsJsonInitData);
+  }
+
+  deleteItem(): void{
+    console.log(this.datatable.getCheckedRows());
+    window.alert('Select item which index is xxx deleted' + this.datatable.getCheckedRows());
   }
 
 

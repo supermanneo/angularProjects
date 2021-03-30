@@ -1,5 +1,6 @@
 <div>
   <button (click)="loadRealData()">Reload Real Data From Local Storage Service</button>
+  <button (click)="deleteItem()">Delete Check Item</button>
 
   <d-data-table [dataSource]="basicDataSource" [tableWidthConfig]="tableWidthConfig">
     <thead dTableHead [checkable]="true" [checkOptions]="checkOptions">
