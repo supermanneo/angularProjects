@@ -1,12 +1,12 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
-import { products } from "../products";
-import { LocalStorageService } from "../local-storage.service";
+import { products } from '../products';
+import { LocalStorageService } from '../local-storage.service';
 
 @Component({
-  selector: "app-product-list",
-  templateUrl: "./product-list.component.html",
-  styleUrls: ["./product-list.component.css"]
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent {
   products = products;
@@ -14,12 +14,12 @@ export class ProductListComponent {
   constructor(private localStorageService: LocalStorageService) {}
 
   share() {
-    window.alert("The product has been shared!");
-    this.localStorageService.set("shared", "mini");
+    window.alert('The product has been shared!');
+    this.localStorageService.set('shared', 'mini');
   }
 
   onNotify() {
-    window.alert("You will be notified when the product goes on sale");
+    window.alert('You will be notified when the product goes on sale');
   }
 }
 
