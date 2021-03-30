@@ -149,7 +149,16 @@ export class SettingsComponent implements OnInit {
 
   loadRealData(): void{
     let bsJsonInitData: Array<SourceType>;
+    let bsConfigJson;
     const neoOriginSource = [];
+    const bsConfigString: string = this.localStorageService.get('bsConfig');
+    if(bsConfigString != null){
+      bsConfigJson = JSON.parse(JSON.stringify(bsConfigString));
+    }else{
+      // init data by default
+    }
+    console.log(bsConfigJson);
+
     for (let i = 10; i <= 11; i++){
       neoOriginSource.push({
         id: i,
