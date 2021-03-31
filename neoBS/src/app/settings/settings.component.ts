@@ -13,28 +13,42 @@ export class SettingsComponent implements OnInit {
   name = new FormControl('');
   @ViewChild(DataTableComponent, { static: true }) datatable: DataTableComponent;
   // totalData = JSON.parse(JSON.stringify(originSource));
-  basicDataSource: Array<SourceType> = JSON.parse(JSON.stringify(originSource.slice(0, 6)));
+  basicDataSource: Array<SourceType>;
+  currentBsConfigData: Array<neoBsType>;
+
+
+  //basicDataSource: Array<SourceType> = JSON.parse(JSON.stringify(originSource.slice(0, 6)));
   dataTableOptions = {
     columns: [
       {
-        field: 'firstName',
-        header: 'First Name',
+        field: 'codeId',
+        header: 'Code ID',
         fieldType: 'text'
       },
       {
-        field: 'lastName',
-        header: 'Last Name',
+        field: 'codeName',
+        header: 'Code Name',
         fieldType: 'text'
       },
       {
-        field: 'gender',
-        header: 'Gender',
+        field: 'codeAliasName',
+        header: 'Code Alias Name',
         fieldType: 'text'
       },
       {
-        field: 'dob',
-        header: 'Date of birth',
-        fieldType: 'date'
+        field: 'codeRegion',
+        header: 'Code Region',
+        fieldType: 'text'
+      },
+      {
+        field: 'costPrice',
+        header: 'Code Price',
+        fieldType: 'text'
+      },
+      {
+        field: 'shareNumber',
+        header: 'Share Number',
+        fieldType: 'text'
       }
     ]
   };
@@ -52,20 +66,28 @@ export class SettingsComponent implements OnInit {
       width: '50px'
     },
     {
-      field: 'firstName',
+      field: 'codeId',
       width: '150px'
     },
     {
-      field: 'lastName',
+      field: 'codeName',
       width: '150px'
     },
     {
-      field: 'gender',
+      field: 'codeAliasName',
       width: '150px'
     },
     {
-      field: 'dob',
-      width: '200px'
+      field: 'codeRegion',
+      width: '150px'
+    },
+    {
+      field: 'costPrice',
+      width: '150px'
+    },
+    {
+      field: 'shareNumber',
+      width: '150px'
     }
   ];
 
@@ -138,13 +160,34 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    if (this.localStorageService !== null) {
-
-    } else {
+    if (JSON.stringify(this.localStorageService.getObject('bsConfig')) === '{}' || this.localStorageService.getObject('bsConfig').length === 0){
       // Generate init bs config data
-
+      const initData = [];
+      initData.push(
+        {
+          codeId: '600009',
+          codeName: 'Shanghai plane',
+          codeAliasName: 'SJ',
+          codeRegion: 'sh',
+          costPrice: '0.00',
+          shareNumber: '0'
+        }
+      );
+      initData.push(
+        {
+          codeId: '002475',
+          codeName: 'Immediately Precision',
+          codeAliasName: 'LX',
+          codeRegion: 'sz',
+          costPrice: '0.00',
+          shareNumber: '0'
+        }
+      );
+      this.localStorageService.setObject('bsConfig', initData);
+      console.log('bsConfig is null, generate init data successfully.');
     }
+    this.currentBsConfigData = this.localStorageService.getObject('bsConfig') as Array<neoBsType>;
+    this.basicDataSource = JSON.parse(JSON.stringify(this.currentBsConfigData));
   }
 
   loadRealData(): void{
@@ -177,6 +220,14 @@ export class SettingsComponent implements OnInit {
 
   deleteItem(): void{
     console.log(this.datatable.getCheckedRows());
+    // Support multi delete
+    for (let i = 0; i < this.datatable.getCheckedRows().length; i++) {
+      let deleteIndex;
+      deleteIndex = this.currentBsConfigData.findIndex(element => element.codeId === this.datatable.getCheckedRows()[i].codeId);
+      this.currentBsConfigData.splice(deleteIndex, 1);
+    }
+    this.localStorageService.setObject('bsConfig', this.currentBsConfigData);
+    this.basicDataSource = JSON.parse(JSON.stringify(this.currentBsConfigData));
     window.alert('Select item which index is xxx deleted' + this.datatable.getCheckedRows());
   }
 
@@ -188,6 +239,15 @@ export class SettingsComponent implements OnInit {
 
 
 
+}
+
+export interface neoBsType{
+  codeId: string;
+  codeName: string;
+  codeAliasName: string;
+  codeRegion: string;
+  costPrice: number;
+  shareNumber: number;
 }
 
 export interface neoSourceType {
