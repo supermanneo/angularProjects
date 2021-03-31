@@ -186,8 +186,7 @@ export class SettingsComponent implements OnInit {
       this.localStorageService.setObject('bsConfig', initData);
       console.log('bsConfig is null, generate init data successfully.');
     }
-    this.currentBsConfigData = this.localStorageService.getObject('bsConfig') as Array<neoBsType>;
-    this.basicDataSource = JSON.parse(JSON.stringify(this.currentBsConfigData));
+    this.reloadBsConfigData();
   }
 
   loadRealData(): void{
@@ -219,16 +218,20 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteItem(): void{
-    console.log(this.datatable.getCheckedRows());
     // Support multi delete
+    let deleteIndex: number;
     for (let i = 0; i < this.datatable.getCheckedRows().length; i++) {
-      let deleteIndex;
       deleteIndex = this.currentBsConfigData.findIndex(element => element.codeId === this.datatable.getCheckedRows()[i].codeId);
       this.currentBsConfigData.splice(deleteIndex, 1);
     }
     this.localStorageService.setObject('bsConfig', this.currentBsConfigData);
+    this.reloadBsConfigData();
+    window.alert('Delete successfully.');
+  }
+
+  reloadBsConfigData(): void{
+    this.currentBsConfigData = this.localStorageService.getObject('bsConfig') as Array<neoBsType>;
     this.basicDataSource = JSON.parse(JSON.stringify(this.currentBsConfigData));
-    window.alert('Select item which index is xxx deleted' + this.datatable.getCheckedRows());
   }
 
 
