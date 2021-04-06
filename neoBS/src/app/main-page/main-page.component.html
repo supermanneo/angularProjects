@@ -1,21 +1,13 @@
 <section>
-  <d-tabs [type]="'tabs'" [(activeTab)]="tabSettingsID" (activeTabChange)="activeTabChange($event)">
-    <d-tab id="tabBsID" title="BS" tabId="tabBsID">
-      <ng-template dTabContent>
-
-      </ng-template>
-    </d-tab>
-
-    <d-tab id="tab2" title="Books" tabId="tab2">
-      <ng-template dTabContent>
-        <p>Tab2 Content</p>
-      </ng-template>
-    </d-tab>
-
-    <d-tab id="tabSettingsID" title="Settings" tabId="tabSettingsID">
-      <ng-template dTabContent>
-        <app-settings></app-settings>
-      </ng-template>
-    </d-tab>
-  </d-tabs>
+  <nz-tabset>
+    <nz-tab nzTitle="BS">
+      <app-bs></app-bs>
+    </nz-tab>
+    <nz-tab nzTitle="Books">
+      Content of Tab Pane 2
+    </nz-tab>
+    <nz-tab nzTitle="GlobalSettings">
+      <app-global-settings></app-global-settings>
+    </nz-tab>
+  </nz-tabset>
 </section>

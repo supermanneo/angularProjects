@@ -21,21 +21,32 @@ import { HeroService } from './hero.service';
 import { BsService } from './bs.service';
 import { BsPageComponent } from './bs-page/bs-page.component';
 import { LocalStorageService } from './local-storage.service';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 import { MainPageComponent } from './main-page/main-page.component';
-import { SettingsComponent } from './settings/settings.component';
 
-// 华为 DevUI UI组件
-// DevUI部分组件依赖angular动画，需要引入animations模块
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TabsModule } from 'ng-devui/tabs';
 
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTableModule } from '@angular/material/table';
-import {DataTableModule, DevUIModule, PaginationModule} from 'ng-devui';
-import {I18nModule} from 'ng-devui/i18n';
+// import { MatTabsModule } from '@angular/material/tabs';
+// import { MatTableModule } from '@angular/material/table';
+// import {DataTableModule, DevUIModule, PaginationModule} from 'ng-devui';
+// import {I18nModule} from 'ng-devui/i18n';
+import { BsComponent } from './bs/bs.component';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { zh_CN } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import zh from '@angular/common/locales/zh';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import {MatTabsModule} from '@angular/material/tabs';
+
+registerLocaleData(zh);
+
+
 
 @NgModule({
   imports: [
@@ -43,10 +54,12 @@ import {I18nModule} from 'ng-devui/i18n';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    MatTabsModule,
-    MatTableModule,
+    NzDrawerModule,
+    NzTabsModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzTableModule,
     BrowserAnimationsModule,
-    TabsModule,
     RouterModule.forRoot([
       {path: '', component: MainPageComponent},
       {path: 'products/:productId', component: ProductDetailsComponent},
@@ -56,11 +69,7 @@ import {I18nModule} from 'ng-devui/i18n';
       {path: 'twoWayBinding', component: ParentComponent},
       {path: 'bs', component: BsPageComponent}
     ]),
-    BrowserAnimationsModule,
-    DataTableModule,
-    PaginationModule,
-    I18nModule,
-    DevUIModule
+    MatTabsModule,
   ],
   declarations: [
     AppComponent,
@@ -76,7 +85,8 @@ import {I18nModule} from 'ng-devui/i18n';
     ParentComponent,
     BsPageComponent,
     MainPageComponent,
-    SettingsComponent
+    BsComponent,
+    GlobalSettingsComponent
   ],
   bootstrap: [AppComponent],
   providers: [CartService, HeroService, BsService, LocalStorageService]

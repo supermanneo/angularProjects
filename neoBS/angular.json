@@ -13,10 +13,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            // 使用华为devUI，如需去除warn，https://angular.io/guide/build#configuring-commonjs-dependencies
-            "allowedCommonJsDependencies": [
-              "lodash"
-            ],
             "outputPath": "dist/neoBS",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -25,12 +21,17 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
+              "src/theme.less",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
-              "node_modules/ng-devui/devui.min.css"
+              "src/styles.css"
             ],
             "scripts": []
           },
