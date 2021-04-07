@@ -123,18 +123,21 @@ export class BsComponent implements OnInit {
     this.getServers('');
   }
 
+  // here should be confirm wheather the result can be format to json or text. it decided the params of format and responseType is json or text
   getServers(term: string) {
     let url = `http://qt.gtimg.cn/q=s_sz002818`;
-
+    let url1 = 'http://hq.sinajs.cn/list=sh601111';
     const nparams = new HttpParams();
 
     nparams.set('search', term); // the user's search value
     nparams.set('action', 'opensearch');
-    nparams.set('format', 'json');
-    nparams.set('callback', '__ng_jsonp__.__req0.finished');
-
+    //nparams.set('format', 'json');
+    nparams.set('format', 'text');
+    //nparams.set('callback', '__ng_jsonp__.__req0.finished');
+    nparams.set('callback', 'JSONP_CALLBACK');
     return this.http
-      .get(url, {responseType: 'json', params: nparams })
+      //.get(url, {responseType: 'json', params: nparams })
+      .get(url1, {responseType: 'text', params: nparams })
       .subscribe(
         (data) => {
           console.log(data);
