@@ -43,6 +43,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import {MatTabsModule} from '@angular/material/tabs';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 registerLocaleData(zh);
 
@@ -61,6 +63,8 @@ registerLocaleData(zh);
     NzPopconfirmModule,
     NzTableModule,
     BrowserAnimationsModule,
+    NzNotificationModule,
+    NzMessageModule,
     RouterModule.forRoot([
       {path: '', component: MainPageComponent},
       {path: 'products/:productId', component: ProductDetailsComponent},

@@ -1,5 +1,6 @@
 <div>
   <button nz-button nzType="primary" (click)="open()">Open</button>
+  <button nz-button [nzType]="'primary'" (click)="createBasicNotification()">Open the notification box</button>
   <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="close()">
 <!--    <ng-container *nzDrawerContent>-->
 <!--      <p>Some contents...</p>-->

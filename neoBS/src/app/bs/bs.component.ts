@@ -1,13 +1,13 @@
-import { Component, OnInit, TemplateRef, ViewChild, Injectable } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Injectable, OnDestroy } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { LocalStorageService } from '../local-storage.service';
 import { BsConfigDataType } from '../bs-config-data-type';
 
 import { Config, ConfigService } from './config.service';
 import {catchError} from 'rxjs/operators';
-
-
-
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import {timer, Observable, Observer, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-bs',
@@ -28,17 +28,48 @@ export class BsComponent implements OnInit {
   headers: string[];
   config: Config;
 
+  timer$: Observable<number> = timer(3000, 10000);
+
 
   constructor(
     private http: HttpClient,
     private localStorageService: LocalStorageService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private notification: NzNotificationService,
+    private message: NzMessageService
   )
   {
     this.doms.push(document.getElementById('app-container'));
   }
 
   ngOnInit(): void {
+    const timerSub: Subscription = this.timer$.subscribe(number => {
+      console.log('number', number);
+      this.createBasicNotification();
+      this.showGlobalMsg();
+      if (number > 10) {
+        timerSub.unsubscribe();
+      }
+    });
+  }
+
+  ngOnDestroy(){
+
+  }
+
+  showGlobalMsg(){
+    this.message.info('This is a normal message');
+  }
+
+  createBasicNotification(): void {
+    this.notification
+      .blank(
+        'Notification Title',
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.'
+      )
+      .onClick.subscribe(() => {
+      console.log('notification clicked!');
+    });
   }
 
   showConfig() {
@@ -102,42 +133,42 @@ export class BsComponent implements OnInit {
     this.visible = true;
     this.currentBsConfigData = this.localStorageService.getObject('bsConfig');
     for (let i = 0; i < this.currentBsConfigData.length; i++){
-      // const options = {
-      //   responseType: 'json' as const,
-      //   observe: 'body' as const
-      // };
-      // let url = 'http://hq.sinajs.cn/list=' + this.currentBsConfigData[i].codeRegion + this.currentBsConfigData[i].codeId;
-      //
-      // this.currentBsConfigData[i].currentPrice = 10.00;
-      // console.log(this.showConfig());
-      // console.log(this.showConfigResponse());
+      this.getAndAssignCurrentPrice(this.currentBsConfigData[i].codeId, this.currentBsConfigData[i].codeRegion, i);
     }
+  }
 
-    // console.log(this.configService.searchHeroes('').subscribe(
-    //   resp => {
-    //     console.log(resp.response);
-    //   }
-    // ));
-// The name of the callback should be the string JSON_CALLBACK.
-    //this.getDataByJsonp();
-    this.getServers('');
+
+  // This is an sync function, all logic which need sequence should write in subscribe function
+  getAndAssignCurrentPrice(codeId: string, codeRegion: string, originDataIndex: number): void{
+    const bsUrl = `http://qt.gtimg.cn/q=s_${codeRegion}${codeId}`;
+    const bsParams = new HttpParams();
+    bsParams.set('format', 'text');
+    // __ng_jsonp__.__req0.finished
+    bsParams.set('callback', 'JSONP_CALLBACK');
+    this.http
+      .get(bsUrl, {responseType: 'text', params: bsParams })
+      .subscribe(
+        (data) => {
+          this.currentBsConfigData[originDataIndex].currentPrice = + data.split('~')[3];
+        },
+        (error) => {
+          console.log(error);
+        });
   }
 
   // here should be confirm wheather the result can be format to json or text. it decided the params of format and responseType is json or text
   getServers(term: string) {
     let url = `http://qt.gtimg.cn/q=s_sz002818`;
-    let url1 = 'http://hq.sinajs.cn/list=sh601111';
     const nparams = new HttpParams();
 
     nparams.set('search', term); // the user's search value
     nparams.set('action', 'opensearch');
-    //nparams.set('format', 'json');
     nparams.set('format', 'text');
-    //nparams.set('callback', '__ng_jsonp__.__req0.finished');
+    // __ng_jsonp__.__req0.finished
     nparams.set('callback', 'JSONP_CALLBACK');
     return this.http
       //.get(url, {responseType: 'json', params: nparams })
-      .get(url1, {responseType: 'text', params: nparams })
+      .get(url, {responseType: 'text', params: nparams })
       .subscribe(
         (data) => {
           console.log(data);
