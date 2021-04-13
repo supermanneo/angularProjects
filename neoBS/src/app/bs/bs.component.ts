@@ -25,7 +25,7 @@ export class BsComponent implements OnInit {
   @ViewChild('customTemplate') customTemplate: TemplateRef<any>;
   msgs: Array<any> = [];
   currentBsConfigData: Array<BsConfigDataType>;
-  currentBsActionData: Array<BsActionDataType>;
+  currentBsActionData: Array<BsActionDataType> = [];
   doms: any = [];
   visible = false;
   webAddress = '';
@@ -62,7 +62,18 @@ export class BsComponent implements OnInit {
       {
         describe: 'ghxw',
         action: 'get',
-        actionDate: '2021-04-13',
+        actionDate: '2021-04-11',
+        costPrice: 0,
+        shareNumber: 0,
+        color: 'red'
+      },
+      {
+        describe: 'ghxw',
+        action: 'get',
+        actionDate: '2021-04-12',
+        costPrice: 0,
+        shareNumber: 0,
+        color: 'red'
       }
     );
   }

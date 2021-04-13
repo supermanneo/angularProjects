@@ -4,4 +4,5 @@ export interface BsActionDataType {
   actionDate: string;
   costPrice: number;
   shareNumber: number;
+  color: string;
 }
