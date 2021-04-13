@@ -8,4 +8,6 @@ export interface BsConfigDataType {
   shareNumber: number;
   $expandConfig?: any;
   currentPrice: number;
+  upDownPrice: number;
+  upDownPercent: number;
 }

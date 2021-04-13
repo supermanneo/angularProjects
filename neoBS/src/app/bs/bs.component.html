@@ -1,15 +1,52 @@
 <div>
   <button nz-button nzType="primary" (click)="open()">Open</button>
   <button nz-button [nzType]="'primary'" (click)="createBasicNotification()">Open the notification box</button>
-  <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="close()">
-<!--    <ng-container *nzDrawerContent>-->
-<!--      <p>Some contents...</p>-->
-<!--      <p>Some contents...</p>-->
-<!--      <p>Some contents...</p>-->
-<!--    </ng-container>-->
-    <ng-container *ngFor="let data of currentBsConfigData">
-      <p>{{ data.codeName}}</p>
-      <p>{{ data.currentPrice }}</p>
+
+  <div>
+    <nz-input-group nzAddOnBefore="Http://">
+      <input nz-input placeholder="www.baidu.com" [(ngModel)]="webAddress" />
+    </nz-input-group>
+
+    <button nz-button nzType="primary" (click)="openWebSite()">Go</button>
+  </div>
+
+  <iframe frameborder="0" width="1000" height="700" allowfullscreen="true" [src]="webAddressSafeUrl"></iframe>
+
+  <nz-timeline>
+    <nz-timeline-item nzColor="green">Create a services site 2015-09-01</nz-timeline-item>
+    <nz-timeline-item nzColor="green">Solve initial network problems 2015-09-01</nz-timeline-item>
+    <nz-timeline-item nzColor="red">
+      <p>Solve initial network problems 1</p>
+      <p>Solve initial network problems 2</p>
+      <p>Solve initial network problems 3 2015-09-01</p>
+    </nz-timeline-item>
+    <nz-timeline-item>
+      <p>Technical testing 1</p>
+      <p>Technical testing 2</p>
+      <p>Technical testing 3 2015-09-01</p>
+    </nz-timeline-item>
+    <nz-timeline-item nzColor="gray">
+      <p>Technical testing 1</p>
+      <p>Technical testing 2</p>
+      <p>Technical testing 3 2015-09-01</p>
+    </nz-timeline-item>
+    <nz-timeline-item nzColor="gray">
+      <p>Technical testing 1</p>
+      <p>Technical testing 2</p>
+      <p>Technical testing 3 2015-09-01</p>
+    </nz-timeline-item>
+  </nz-timeline>
+
+  <!-- 抽屉 -->
+  <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Bs Details" (nzOnClose)="close()" [nzWidth]="400">
+    <ng-container>
+      <nz-collapse>
+        <nz-collapse-panel *ngFor="let panel of bsDetailPanels" [nzHeader]="panel.name" [nzActive]="panel.active" [nzDisabled]="panel.disabled">
+          <p style="margin:0;">
+            {{ panel.content }}
+          </p>
+        </nz-collapse-panel>
+      </nz-collapse>
     </ng-container>
   </nz-drawer>
 

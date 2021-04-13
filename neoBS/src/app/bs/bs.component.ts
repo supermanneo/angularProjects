@@ -2,12 +2,16 @@ import { Component, OnInit, TemplateRef, ViewChild, Injectable, OnDestroy } from
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { LocalStorageService } from '../local-storage.service';
 import { BsConfigDataType } from '../bs-config-data-type';
+import { BsActionDataType } from '../bs-action-data-type';
 
 import { Config, ConfigService } from './config.service';
 import {catchError} from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import {timer, Observable, Observer, Subscription} from 'rxjs';
+
+// 解决从外部引入iframe的src值，产生的不安全错误：unsafe value used in a resource URL
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-bs',
@@ -21,9 +25,11 @@ export class BsComponent implements OnInit {
   @ViewChild('customTemplate') customTemplate: TemplateRef<any>;
   msgs: Array<any> = [];
   currentBsConfigData: Array<BsConfigDataType>;
+  currentBsActionData: Array<BsActionDataType>;
   doms: any = [];
   visible = false;
-
+  webAddress = '';
+  webAddressSafeUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://ng.ant.design/components/input/zh');
   error: any;
   headers: string[];
   config: Config;
@@ -36,29 +42,45 @@ export class BsComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private configService: ConfigService,
     private notification: NzNotificationService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private sanitizer: DomSanitizer
   )
   {
     this.doms.push(document.getElementById('app-container'));
   }
 
   ngOnInit(): void {
-    const timerSub: Subscription = this.timer$.subscribe(number => {
-      console.log('number', number);
-      this.createBasicNotification();
-      this.showGlobalMsg();
-      if (number > 10) {
-        timerSub.unsubscribe();
+    // const timerSub: Subscription = this.timer$.subscribe(number => {
+    //   console.log('number', number);
+    //   this.createBasicNotification();
+    //   this.showGlobalMsg();
+    //   if (number > 10) {
+    //     timerSub.unsubscribe();
+    //   }
+    // });
+    this.currentBsActionData.push(
+      {
+        describe: 'ghxw',
+        action: 'get',
+        actionDate: '2021-04-13',
       }
-    });
+    );
   }
 
   ngOnDestroy(){
 
   }
 
+  transferUrl(changeValue){
+    return
+  }
+
   showGlobalMsg(){
     this.message.info('This is a normal message');
+  }
+
+  openWebSite(){
+    this.webAddressSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`Http://${this.webAddress}`);
   }
 
   createBasicNotification(): void {
@@ -129,12 +151,18 @@ export class BsComponent implements OnInit {
 
   }
 
+  bsDetailPanels = [];
+
   open(): void {
     this.visible = true;
     this.currentBsConfigData = this.localStorageService.getObject('bsConfig');
+    this.bsDetailPanels = [];
     for (let i = 0; i < this.currentBsConfigData.length; i++){
       this.getAndAssignCurrentPrice(this.currentBsConfigData[i].codeId, this.currentBsConfigData[i].codeRegion, i);
+
     }
+
+
   }
 
 
@@ -149,7 +177,19 @@ export class BsComponent implements OnInit {
       .get(bsUrl, {responseType: 'text', params: bsParams })
       .subscribe(
         (data) => {
+          console.log(data);
           this.currentBsConfigData[originDataIndex].currentPrice = + data.split('~')[3];
+          this.currentBsConfigData[originDataIndex].upDownPrice = + data.split('~')[4];
+          this.currentBsConfigData[originDataIndex].upDownPercent = + data.split('~')[5];
+          this.bsDetailPanels.push({
+            active: false,
+            name: `${this.currentBsConfigData[originDataIndex].codeName}
+            ${this.currentBsConfigData[originDataIndex].currentPrice}
+            ${this.currentBsConfigData[originDataIndex].upDownPercent}%
+            ${this.currentBsConfigData[originDataIndex].upDownPrice}`,
+            content: this.currentBsConfigData[originDataIndex].costPrice,
+            disabled: false
+          });
         },
         (error) => {
           console.log(error);
