@@ -149,6 +149,8 @@ ng-zorro-antd/select
 
 ng-zorro-antd/spin
 
+ng-zorro-antd/switch
+
 ng-zorro-antd/table
 
 ng-zorro-antd/tabs
